@@ -1,5 +1,6 @@
 package com.eatP2.loginpage;
 
+import com.eatP2.Config;
 import com.eatP2.pages.login.ForgetPasswordPage;
 import org.junit.After;
 import org.junit.Before;
@@ -8,6 +9,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
@@ -15,7 +18,6 @@ import static org.junit.Assert.*;
 public class ForgotPasswordTests {// TS17-Forget Password
 
     private WebDriver driver;
-    String loginURL = "http://example.com/login";
 
     @Before
     public void setUp() {
@@ -23,7 +25,7 @@ public class ForgotPasswordTests {// TS17-Forget Password
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.manage().window().maximize();
-        driver.get(loginURL);
+        driver.get(Config.LOGIN_PAGE_URL);
     }
 
     @After
@@ -57,15 +59,11 @@ public class ForgotPasswordTests {// TS17-Forget Password
         forgetPasswordPage.navigateToForgotPassword();
 
         forgetPasswordPage.enterEmail("testuser@test.com");
-        forgetPasswordPage.clickSubmitBtn();
+        forgetPasswordPage.clickSubmitButton();
 
         // Expected Result: Success message should be displayed or user redirected to confirmation page
-        if (forgetPasswordPage.isSuccessMessageDisplayed()) {
-            assertTrue("Password reset success message displayed but incorrect.", forgetPasswordPage.verifySuccessMessage());
-        }
-        else{
-            fail("Password reset success message not displayed.");
-        }
+        assertTrue("Password reset success tick not displayed.", forgetPasswordPage.verifySuccessTickOnButton());
+
 
     }
 
@@ -77,21 +75,15 @@ public class ForgotPasswordTests {// TS17-Forget Password
         ForgetPasswordPage forgetPasswordPage = new ForgetPasswordPage(driver);
         forgetPasswordPage.navigateToForgotPassword();
 
-        forgetPasswordPage.enterEmail("testuser@test.com");
-        forgetPasswordPage.clickSubmitBtn();
+        forgetPasswordPage.enterEmail("testuser");
+        forgetPasswordPage.clickSubmitButton();
+
 
         // Expected Result: Error message should be displayed
-        if (forgetPasswordPage.isErrorMessageDisplayed()) {
-            assertTrue("Password reset invalid email message displayed but incorrect.", forgetPasswordPage.verifyInvalidEmailMessage());
-        }
-        else{
-            fail("Password reset invalid email message not displayed.");
-        }
+        assertFalse("Password reset success tick should not be displayed.", forgetPasswordPage.verifySuccessTickOnButton());
 
-
-        WebElement errorMessage = driver.findElement(By.id("error-message"));
-        assertTrue(errorMessage.isDisplayed());
-        assertEquals("Invalid email", errorMessage.getText());
+        assertTrue("Error message not displayed.",forgetPasswordPage.isErrorMessageDisplayed());
+        assertTrue("Error message text is incorrect",forgetPasswordPage.verifyInvalidEmailMessage());
     }
 
 
@@ -100,20 +92,15 @@ public class ForgotPasswordTests {// TS17-Forget Password
         // Test Case ID: TC 04
         // Test Description: A password reset attempt with an email address not registered in the system will be tested.
 
-
         ForgetPasswordPage forgetPasswordPage = new ForgetPasswordPage(driver);
         forgetPasswordPage.navigateToForgotPassword();
 
         forgetPasswordPage.enterEmail("nonexist@test.com");
-        forgetPasswordPage.clickSubmitBtn();
+        forgetPasswordPage.clickSubmitButton();
 
         // Expected Result: The system should display the message "Password reset request sent!" but no password reset request should be sent.
-        if (forgetPasswordPage.isSuccessMessageDisplayed()) {
-            assertTrue("Password reset success message displayed but incorrect.", forgetPasswordPage.verifySuccessMessage());
-        }
-        else{
-            fail("Password reset success message not displayed.");
-        }
+        assertTrue("Password reset success tick not displayed.", forgetPasswordPage.verifySuccessTickOnButton());
+
 
     }
 
@@ -126,7 +113,6 @@ public class ForgotPasswordTests {// TS17-Forget Password
 
         forgetPasswordPage.enterEmail("BackButtonWillBeClicked");
         forgetPasswordPage.clickBackBtn();
-
         //Expected Result:  The system should redirect the user back to the login screen.
         assertTrue("Not redirected to login page after back button is clicked",
                 forgetPasswordPage.verifyRoutingBackButton());
@@ -145,7 +131,7 @@ public class ForgotPasswordTests {// TS17-Forget Password
         forgetPasswordPage.enterEmail("");
 
         // Verify that the login button is disabled
-        assertFalse("Login button should be disabled when username and password are empty.", forgetPasswordPage.isSubmitBtnEnabled());
+        assertFalse("Submit button should be disabled when email field is empty.", forgetPasswordPage.isSubmitBtnEnabled());
 
     }
 

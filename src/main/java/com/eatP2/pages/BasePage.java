@@ -3,6 +3,7 @@ package com.eatP2.pages;
 import com.eatP2.Config;
 import com.eatP2.Constants;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,9 +14,10 @@ import java.time.Duration;
 
 public class BasePage {
     protected WebDriver driver;
+    WebDriverWait wait ;
     protected By successMessage = By.id("success-message");
     protected By errorMessage = By.id("error-message");
-    protected By warningMessage = By.id("error-message");
+    protected By warningMessage = By.id("warning-message");
     protected By confirmationPopup =By.id("confirmation-popup");
 
     protected By cancelBtn =By.id("cancel-button");
@@ -37,14 +39,16 @@ public class BasePage {
     public BasePage(WebDriver driver)
     {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
 
-    public boolean isElementPresent( By locator) {
+    public boolean isElementPresent( By id) {
         try {
-            driver.findElement(locator);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(id));
+            driver.findElement(id);
             return true;
-        } catch (org.openqa.selenium.NoSuchElementException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -93,27 +97,28 @@ public class BasePage {
     public void clickButton(By id){
         driver.findElement(id).click();
     }
+    public void clickButtonWithJS(By id){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", driver.findElement(id));
+    }
 
     public void clickEditIcon() {
         // Click the trash bin icon to delete customer info
-        driver.findElement(By.id("edit")).click();
+        clickButton(By.id("edit"));
     }
-    public void clickCancelButton() {
-            driver.findElement(cancelBtn).click();
 
-    }
 
     public void clickCancelBtn(){
         clickButton(cancelBtn);
     }
 
-    public void clickOkBtn() {
+    public void clickOkButton() {
         clickButton(okBtn);
     }
-    public void clickYesBtn() {
+    public void clickYesButton() {
         clickButton(yesBtn);
     }
-    public void clickNoBtn() {
+    public void clickNoButton() {
         clickButton(noBtn);
     }
 
@@ -121,10 +126,18 @@ public class BasePage {
         clickButton(trashBtn);
     }
     public boolean verifyPageUrl(String url){
-        return driver.getCurrentUrl().equals(url);
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+            return wait.until(ExpectedConditions.urlToBe(url));
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
-
+    protected boolean isWarningMessageDisplayed() {
+        return isDisplayed(warningMessage);
+    }
     public boolean isSuccessMessageDisplayed() {
         return isDisplayed(successMessage);
     }
@@ -138,7 +151,7 @@ public class BasePage {
 
     public boolean isDisplayed(By locator){
         if(isElementPresent(locator)) {
-            return driver.findElement(errorMessage).isDisplayed()&&driver.findElement(errorMessage).isEnabled();
+            return driver.findElement(errorMessage).isDisplayed();
         }
         else{
             return false;
@@ -178,18 +191,18 @@ public class BasePage {
     }
 
     public void clickSaveButton() {
-        driver.findElement(saveBtn).click();
+        clickButton(saveBtn);
     }
     public void clickSubmitButton(){
-        driver.findElement(submitBtn).click();
+        clickButton(submitBtn);
     }
 
     public void clickNextButton() {
-        driver.findElement(nextBtn).click();
+        clickButton(nextBtn);
     }
 
     public void clickPreviousButton() {
-        driver.findElement(prevBtn).click();
+        clickButton(prevBtn);
     }
 
     public boolean checkPreviousButton() {

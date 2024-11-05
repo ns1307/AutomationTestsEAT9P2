@@ -75,7 +75,7 @@ public class CustomerDeleteTest extends BaseTest {// TS5-Customer Info Delete
 
         customerInfoPage.clickTrashIcon();
         // Step 3: Click 'Yes' on the confirmation popup
-        customerInfoPage.clickYesBtn();
+        customerInfoPage.clickYesButton();
 
 
         // Expected Result: The system should check whether the customer has active products.
@@ -84,7 +84,7 @@ public class CustomerDeleteTest extends BaseTest {// TS5-Customer Info Delete
         assertFalse("Customer deleted from database despite he has active products.", customerInfoPage.isCustomerDeletedFromDatabase());
         if(customerInfoPage.isErrorMessageDisplayed()){
             assertTrue("Error message incorrect.",customerInfoPage.verifyErrorMessage());
-            customerInfoPage.clickOkBtn();
+            customerInfoPage.clickOkButton();
         }
         else{
             fail("Error message not displayed.");
@@ -105,7 +105,7 @@ public class CustomerDeleteTest extends BaseTest {// TS5-Customer Info Delete
 
         customerInfoPage.clickTrashIcon();
         // Step 3: Click 'Yes' on the confirmation popup
-        customerInfoPage.clickYesBtn();
+        customerInfoPage.clickYesButton();
         // Expected Result: The system should check whether the customer has any active products.
         //Since the customer has no active products, the customer record should be soft-deleted, and the `deleted_date` field should be updated with the current date.
         //A "Customer Deleted" message should be displayed to the user with "OK" button.

@@ -4,19 +4,27 @@ import com.eatP2.Config;
 import com.eatP2.Constants;
 import com.eatP2.pages.BasePage;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 public class ForgetPasswordPage extends BasePage {
-    By email = By.id("email");
-    By backBtn = By.id("back");
-    By submitBtn = By.id("submit");
-    By forgetPswdField = By.linkText("Forgot Password");
+    By email = By.id("floatingUsername");
+    By backBtn = By.xpath("/html/body/app-root/app-forgot-password/div/form/div[2]/a");
+    // Note: forget password button is displayed in login page.
+    By forgetPswdBtn = By.xpath("/html/body/app-root/app-login/div/form/a");
+
     public ForgetPasswordPage(WebDriver driver) {
         super(driver);
+        this.submitBtn=By.xpath("/html/body/app-root/app-forgot-password/div/form/button");
+        this.errorMessage=By.xpath("/html/body/app-root/app-forgot-password/div/form/div[1]/small");
     }
 
     public void navigateToForgotPassword() {
-        navigateToURL(Config.FORGOT_PSW_PAGE_URL);
+        clickForgetPswdButton();
+    }
+
+    private void clickForgetPswdButton() {
+        clickButton(forgetPswdBtn);
     }
 
     public boolean verifyPageUrl() {
@@ -26,11 +34,9 @@ public class ForgetPasswordPage extends BasePage {
         setValue(this.email, email);
     }
     public void clickBackBtn() {
-        clickButton(backBtn);
+        clickButtonWithJS(backBtn);
     }
-    public void clickSubmitBtn() {
-        clickButton(submitBtn);
-    }
+
 
 
     public boolean verifySuccessMessage() {
@@ -46,6 +52,11 @@ public class ForgetPasswordPage extends BasePage {
     }
 
     public boolean verifyRoutingBackButton() {
-        return verifyPageUrl(Config.LOGIN_PAGE_URL);
+        return verifyPageUrl(Config.LOGIN_PAGE_URL+"/login");
     }
+    public boolean verifySuccessTickOnButton() {
+        return driver.findElement(submitBtn).getAttribute("class").contains("success");
+    }
+
+
 }

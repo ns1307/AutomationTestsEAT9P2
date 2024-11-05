@@ -1,6 +1,7 @@
 package com.eatP2.loginpage;
 
 import com.eatP2.Config;
+import com.eatP2.models.User;
 import com.eatP2.pages.login.LoginPage;
 import org.junit.After;
 import org.junit.Before;
@@ -44,15 +45,11 @@ public class LoginTests {// TS1-Login to the system
         // Test Case Name: Successful login to the system
         // Test Description: It will be tested whether the user can log into the system with the correct email and password.
         LoginPage loginPage = new LoginPage(driver);
-        String email="testuser@test.com";
-        String password="password";
         loginPage.navigateToLoginPage();
-        loginPage.loginWithCredentials(email , password);
+        loginPage.loginWithCredentials("testuser@test.com","Password1234");
         // Wait for successful login
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-        boolean isRedirected = wait.until(ExpectedConditions.urlToBe(Config.SEARCH_PAGE_URL));
         // Expected Result: The user logs into the system and is redirected to the Customer Search screen.
-        assertTrue("User should be redirected to the dashboard page after successful login", isRedirected);
+        assertTrue("User should be redirected to the dashboard page after successful login",loginPage.verifySuccessfulRouting());
     }
     @Test
     public void testUnsuccessfulLoginInvalidEmail() {
@@ -64,9 +61,9 @@ public class LoginTests {// TS1-Login to the system
         String password="validpassword";
         loginPage.navigateToLoginPage();
         loginPage.loginWithCredentials(email , password);
-
+        assertTrue("No error message displayed after login attempt with Invalid Email",loginPage.isErrorMessageDisplayed());
         // Expected Result: The system displays the warning message, "Invalid email!"
-        assertTrue(loginPage.verifyInvalidEmailMessage());
+        assertTrue("Invalid email message text is incorrect.",loginPage.verifyInvalidEmailMessage());
     }
     @Test
     public void testUnsuccessfulLoginWrongPassword() {
@@ -77,11 +74,10 @@ public class LoginTests {// TS1-Login to the system
         String email="testuser@test.com";
         String password="wrongpassword";
         loginPage.navigateToLoginPage();
-        System.out.println(driver.getCurrentUrl());
         loginPage.loginWithCredentials(email ,password );
-
+        assertTrue("Error message not displayed after login attempt with Wrong Email",loginPage.isErrorMessageDisplayed());
         // Expected Result: The system displays the warning message, "Wrong email or password. Please try again!"
-        assertTrue(loginPage.verifyUnsuccessfulLoginMessage());
+        assertTrue("Unsuccessful message text is incorrect.",loginPage.verifyUnsuccessfulLoginMessage());
     }
 
 
@@ -116,7 +112,13 @@ public class LoginTests {// TS1-Login to the system
         // Expected Result: The password should be masked.
         assertEquals("Password field should be masked", "password", loginPage.getPasswordFieldType());
 
-        loginPage.clickPasswordEyeButton();
+        if(loginPage.isPasswordEyeDisplayed()){
+            loginPage.clickPasswordEyeButton();
+        }
+        else {
+            fail("Password eye button does not exist.");
+        }
+
 
         //if type is text, input is not hidden
         // Expected Result: The password mask should be removed.
@@ -140,14 +142,11 @@ public class LoginTests {// TS1-Login to the system
         LoginPage loginPage = new LoginPage(driver);
         loginPage.navigateToLoginPage();
 
-        //TO-BE EDITED
-        //-------
-        WebElement passwordField = driver.findElement(By.id("password"));
-        Actions actions = new Actions(driver);
-        actions.moveToElement(passwordField).click().sendKeys(Keys.chord(Keys.SHIFT, "p", "a", "s", "s", "w", "o", "r", "d")).perform();
-        String capsLockWarning = loginPage.getWarningMessage();
+
+        assertTrue("Caps Lock Warning not displayed", loginPage.isCapsLockSupported());
+
         // Expected Result: The system displays the warning message, “Caps Lock ON!”
-        assertEquals("Caps Lock ON!",capsLockWarning);
+        assertTrue("Caps Lock message is incorrect.",loginPage.verifyCapsLockMessage());
 
     }
 

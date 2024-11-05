@@ -10,24 +10,25 @@ import java.sql.SQLException;
 
 public class UserDAO extends BaseDAO{
 
-    User getUserFromDatabase(){
-        connectToDatabase();
+    public User getUserFromDatabase(){
+        connectToUsersDatabase();
         String id=null;
-        String firstName = null;
+        String name = null;
         String lastName = null;
         String email = null;
         String password = null;
+        String identityNo = null;
 
         try {
             String query = "SELECT * FROM users LIMIT 1;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    id=resultSet.getString("id");
-                    firstName = resultSet.getString("firstname");
-                    lastName = resultSet.getString("lastname");
                     email = resultSet.getString("email");
                     password = resultSet.getString("password");
+                    id=resultSet.getString("id");
+                    identityNo = resultSet.getString("identityno");
+                    name = resultSet.getString("name");
                 } else {
                     throw new SQLException("No user found.");
                 }
@@ -35,8 +36,8 @@ public class UserDAO extends BaseDAO{
         } catch (Exception e) {
             e.getMessage();
         }
-        if (id!=null || firstName != null || lastName != null || email != null || password != null ) {
-            return new User(id,firstName,lastName,email,password);
+        if (id!=null || email!=null || password != null|| name != null || identityNo != null || name != null ) {
+            return new User(id,name,identityNo,email,password);
         } else {
             return null;
         }

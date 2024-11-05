@@ -8,8 +8,16 @@ public class BaseDAO {
     public void connectToDatabase(){
         try {
             // Set up database connection
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/your_database", "username", "password");
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5433/identitydb", "postgres", "test");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void connectToUsersDatabase(){
+        try {
+            // Set up database connection
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5433/identitydb", "postgres", "test");
         } catch (Exception e) {
             e.printStackTrace();
         }

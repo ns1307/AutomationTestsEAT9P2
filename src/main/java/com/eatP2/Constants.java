@@ -10,6 +10,7 @@ public class Constants {
     public static final String UNSUCCESSFULL_LOGIN ="Wrong email or password. Please try again!";
     public static final String INVALID_EMAIL ="Email must be a valid email address.";
     public static final String SUCCESS_PASSWORD_RESET="Password reset request sent!";
+    public static final String CAPS_LOCK_ON="Caps Lock ON!";
     public static final String CONFIRM_DELETE="Are you sure to delete this customer?";
 
     public static final String SUCCESS_DELETE = "Customer successfully deleted.";
