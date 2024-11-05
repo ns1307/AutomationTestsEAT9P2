@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class BasePage {
     protected WebDriver driver;
@@ -33,9 +34,9 @@ public class BasePage {
     protected By submitBtn =By.id("submitButton");
     protected By trashBtn=By.id("trashButton");
 
-    protected By usernameField = By.id("username");
-    protected By passwordField = By.id("password");
-    protected By loginBtn = By.id("login-button");
+    protected By emailField = By.id("floatingEmail");
+    protected By passwordField = By.id("floatingPassword");
+    protected By loginBtn = By.xpath("/html/body/app-root/app-login/div/form/div[3]/div/button");
     public BasePage(WebDriver driver)
     {
         this.driver = driver;
@@ -46,7 +47,7 @@ public class BasePage {
     public boolean isElementPresent( By id) {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(id));
-            driver.findElement(id);
+            find(id);
             return true;
         } catch (Exception e) {
             return false;
@@ -59,9 +60,9 @@ public class BasePage {
         driver.get(Config.LOGIN_PAGE_URL);
 
         // Perform login
-        WebElement usernameField = driver.findElement(this.usernameField);
-        WebElement passwordField = driver.findElement(this.passwordField);
-        WebElement loginButton = driver.findElement(loginBtn);
+        WebElement usernameField = find(this.emailField);
+        WebElement passwordField = find(this.passwordField);
+        WebElement loginButton = find(loginBtn);
 
         usernameField.sendKeys(Constants.username);
         passwordField.sendKeys(Constants.password);
@@ -69,7 +70,7 @@ public class BasePage {
     }
 
     public  boolean checkDisabledSaveButton() {
-        WebElement saveButton = driver.findElement(saveBtn);
+        WebElement saveButton = find(saveBtn);
         return saveButton.isEnabled();
     }
 
@@ -91,15 +92,15 @@ public class BasePage {
     }
 
     public boolean checkErrorMessage(String fieldName){
-        return driver.findElement(errorMessage).getText().equals(fieldName+" must be valid." );
+        return find(errorMessage).getText().equals(fieldName+" must be valid." );
     }
 
     public void clickButton(By id){
-        driver.findElement(id).click();
+        wait.until(ExpectedConditions.elementToBeClickable(id)).click();
     }
     public void clickButtonWithJS(By id){
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].click();", driver.findElement(id));
+        js.executeScript("arguments[0].click();", find(id));
     }
 
     public void clickEditIcon() {
@@ -134,7 +135,12 @@ public class BasePage {
             return false;
         }
     }
-
+    protected WebElement find(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+    protected List<WebElement> findAll(By id) {
+        return driver.findElements(id);
+    }
     protected boolean isWarningMessageDisplayed() {
         return isDisplayed(warningMessage);
     }
@@ -151,42 +157,42 @@ public class BasePage {
 
     public boolean isDisplayed(By locator){
         if(isElementPresent(locator)) {
-            return driver.findElement(errorMessage).isDisplayed();
+            return find(errorMessage).isDisplayed();
         }
         else{
             return false;
         }
     }
     public boolean verifySuccessMessage(String message) {
-        return driver.findElement(successMessage).getText().equals(message);
+        return find(successMessage).getText().equals(message);
     }
     public boolean verifyErrorMessage(String message){
-        return driver.findElement(errorMessage).getText().equals(message);
+        return find(errorMessage).getText().equals(message);
     }
 
     protected boolean verifyWarningMessage(String message) {
-        return driver.findElement(warningMessage).getText().equals(message);
+        return find(warningMessage).getText().equals(message);
     }
     public boolean verifyConfirmationMessage(String message) {
-        return driver.findElement(confirmationPopup).getText().equals(message);
+        return find(confirmationPopup).getText().equals(message);
     }
 
     public boolean isEnabled(By locator){
-        return  driver.findElement(locator).isEnabled();
+        return  find(locator).isEnabled();
     }
     protected void navigateToURL(String url) {
         driver.get(url);
         driver.manage().window().maximize();
     }
     protected String getValue(By locator) {
-        return driver.findElement(locator).getText();
+        return find(locator).getText();
     }
     protected void setValue(By locator, String value) {
-        driver.findElement(locator).clear();
-        driver.findElement(locator).sendKeys(value);
+        find(locator).clear();
+        find(locator).sendKeys(value);
     }
     protected void chooseFromDropdown(By locator, String value) {
-        Select dropdown = new Select(driver.findElement(locator));
+        Select dropdown = new Select(find(locator));
         dropdown.selectByValue(value);
     }
 

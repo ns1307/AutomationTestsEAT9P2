@@ -43,7 +43,7 @@ public class BillingAccountPage extends BasePage {
         navigateToURL(Config.ACCOUNTS_PAGE_URL+individualCustomer.getId());
 
 
-        List<WebElement> rows = driver.findElements(row);
+        List<WebElement> rows = findAll(row);
 
         // Find row with ours name and click pencil button
         for (WebElement row : rows) {
@@ -114,7 +114,7 @@ public class BillingAccountPage extends BasePage {
         return verifyWarningMessage(Constants.NULL_ACC_DESCRIPTION);
     }
     public boolean isSaveButtonEnabled() {
-        return driver.findElement(saveBtn).isEnabled();
+        return find(saveBtn).isEnabled();
     }
 
     public boolean verifyRoutingCancelButton() {

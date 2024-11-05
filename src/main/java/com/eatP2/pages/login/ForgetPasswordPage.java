@@ -55,7 +55,7 @@ public class ForgetPasswordPage extends BasePage {
         return verifyPageUrl(Config.LOGIN_PAGE_URL+"/login");
     }
     public boolean verifySuccessTickOnButton() {
-        return driver.findElement(submitBtn).getAttribute("class").contains("success");
+        return find(submitBtn).getAttribute("class").contains("success");
     }
 
 

@@ -1,5 +1,6 @@
 package com.eatP2.pages.newsale;
 
+import com.eatP2.Config;
 import com.eatP2.DAO.BillingAccountDAO;
 import com.eatP2.DAO.CustomerDAO;
 import com.eatP2.DAO.NewSaleDAO;
@@ -51,15 +52,15 @@ public class NewSalePage extends BasePage {
 
 
     private void navigateToAccountsPage(String customerID){
-        driver.get("http://example.com/customer-info/"+customerID); // Replace with the actual URL
-        WebElement customerAccountButton = driver.findElement(By.id("customerAccount"));
+        driver.get(Config.CUST_INFO_PAGE_URL +customerID); // Replace with the actual URL
+        WebElement customerAccountButton = find(By.id("customerAccount"));
         customerAccountButton.click();
     }
     public Boolean navigateToNewSalePage(String accName) {
         login();
 
         if(createNewBillingAccount(accName)){
-            List<WebElement> rows = driver.findElements(row);
+            List<WebElement> rows = findAll(row);
             String billingAccountID =null;
             // Find row with name accName and click new sale
             if (rows.size() > 0) {
@@ -91,10 +92,10 @@ public class NewSalePage extends BasePage {
 
     public void addOfferToBasket(Offer offer) {
         this.offer=offer;
-        driver.findElement(By.id("offer")).click();//Click Offer section
-        driver.findElement(By.id("offer-search")).sendKeys(offer.getId());//Fill offer search id section
-        driver.findElement(By.id("search-button")).click();//Click search button
-        List<WebElement> offerElements = driver.findElements(By.id("offer-id"));
+        find(By.id("offer")).click();//Click Offer section
+        find(By.id("offer-search")).sendKeys(offer.getId());//Fill offer search id section
+        find(By.id("search-button")).click();//Click search button
+        List<WebElement> offerElements = findAll(By.id("offer-id"));
 
         // Click where offer-id value is equal to offer id.
         for (WebElement offerElement : offerElements) {
@@ -103,16 +104,18 @@ public class NewSalePage extends BasePage {
                 break;
             }
         }
-        driver.findElement(By.id("add")).click();//Click add button
+        find(By.id("add")).click();//Click add button
     }
+
+
 
 
     public void addCampaignToBasket(Campaign campaign) {
         this.campaign=campaign;
-        driver.findElement(By.id("camapign")).click();//Click Offer section
-        driver.findElement(By.id("camapign-search")).sendKeys(campaign.getId());//Fill offer search id section
-        driver.findElement(By.id("search-button")).click();//Click search button
-        List<WebElement> offerElements = driver.findElements(By.id("campaign-id"));
+        find(By.id("camapign")).click();//Click Offer section
+        find(By.id("camapign-search")).sendKeys(campaign.getId());//Fill offer search id section
+        find(By.id("search-button")).click();//Click search button
+        List<WebElement> offerElements = findAll(By.id("campaign-id"));
 
         // Click where offer-id value is equal to offer id.
         for (WebElement offerElement : offerElements) {
@@ -121,20 +124,20 @@ public class NewSalePage extends BasePage {
                 break;
             }
         }
-        driver.findElement(By.id("add")).click();//Click add button
+        find(By.id("add")).click();//Click add button
     }
 
     public boolean createNewBillingAccount(BillingAccount billingAccount){
-        WebElement accName= driver.findElement(By.xpath("//input[@id='accountName']"));
-        WebElement accStatus = driver.findElement(By.xpath("//input[@id='accountStatus']"));
-        WebElement accDescription = driver.findElement(By.xpath("//input[@id='accountDescription']"));
+        WebElement accName= find(By.xpath("//input[@id='accountName']"));
+        WebElement accStatus = find(By.xpath("//input[@id='accountStatus']"));
+        WebElement accDescription = find(By.xpath("//input[@id='accountDescription']"));
         accName.clear();
         accName.sendKeys(billingAccount.getAccName());
         Select dropdown = new Select(accStatus);
         dropdown.selectByValue(billingAccount.getAccStatus());
         accDescription.clear();
         accDescription.sendKeys(billingAccount.getAccDescription());
-        WebElement saveButton= driver.findElement(By.xpath("//input[@id='saveButton']"));
+        WebElement saveButton= find(By.xpath("//input[@id='saveButton']"));
         saveButton.click();
         WebElement successMessage= driver.findElement(By.xpath("//input[@id='successMessage']"));
         return successMessage.getText().equals("Billing account information is created!");

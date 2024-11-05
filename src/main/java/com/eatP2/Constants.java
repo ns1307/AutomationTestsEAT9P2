@@ -3,8 +3,8 @@ package com.eatP2;
 
 public class Constants {
 
-    public static final String username="testuser";
-    public static final String password="password123";
+    public static final String username="testuser@test.com";
+    public static final String password="Password1234";
 
 
     public static final String UNSUCCESSFULL_LOGIN ="Wrong email or password. Please try again!";

@@ -12,9 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 public class LoginPage extends BasePage {
-    By emailField = By.id("floatingEmail");
-    By passwordField = By.id("floatingPassword");
-    By loginBtn = By.xpath("/html/body/app-root/app-login/div/form/div[3]/div/button");
+
     By forgetPasswordBtn = By.id("forget-password-button");
     By passwordMaskBtn = By.id("password-eye");
     public LoginPage(WebDriver driver) {
@@ -66,7 +64,7 @@ public class LoginPage extends BasePage {
 
 
     public boolean isLoginButtonEnabled(){
-        return driver.findElement(loginBtn).isEnabled();
+        return find(loginBtn).isEnabled();
     }
 
     public void clickPasswordEyeButton() {
@@ -77,7 +75,7 @@ public class LoginPage extends BasePage {
     }
 
     public String getPasswordFieldType(){
-        return driver.findElement(passwordField).getAttribute("type");
+        return find(passwordField).getAttribute("type");
     }
     public User getUserInstanceFromDatabase(){
         UserDAO userDAO= new UserDAO();
