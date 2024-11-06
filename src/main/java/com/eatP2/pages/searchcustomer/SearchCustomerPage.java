@@ -67,10 +67,10 @@ public class SearchCustomerPage extends BasePage {
     }
 
     public  void clickSearchButton() {
-        clickButtonWithJS(searchButton);
+        clickButtonWithScroll(searchButton,true);
     }
     public void clickClearButton() {
-        clickButtonWithJS(clearButton);
+        clickButtonWithScroll(clearButton,false);
     }
 
     public By getSearchButton() {

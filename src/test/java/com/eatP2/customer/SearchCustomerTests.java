@@ -3,10 +3,8 @@ package com.eatP2.customer;
 import com.eatP2.BaseTest;
 import com.eatP2.pages.customer.CreateCustomerPage;
 import com.eatP2.pages.searchcustomer.SearchCustomerPage;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 
 
 
@@ -30,9 +28,7 @@ public class SearchCustomerTests extends BaseTest {
     @Test
     public void testSearchByIdNumber() {
 
-        //Enter Id Number
         searchCustomerPage.setIdNumber("12345678901");
-        //Wait and scroll
 
         searchCustomerPage.clickSearchButton();
 
@@ -43,7 +39,6 @@ public class SearchCustomerTests extends BaseTest {
 
     @Test
     public void testSearchByCustomerId() {
-
         searchCustomerPage.setCustomerId("a2183bed-230e-4104-98bc-a8a76484b550");
 
         searchCustomerPage.clickSearchButton();
@@ -69,6 +64,7 @@ public class SearchCustomerTests extends BaseTest {
         softAssertions.assertThat(searchCustomerPage.isResultsTableDisplayed())
                 .as("Results table should not be displayed when only First Name is filled.")
                 .isFalse();
+
     }
 
     @Test
@@ -96,12 +92,13 @@ public class SearchCustomerTests extends BaseTest {
 
         searchCustomerPage.clickClearButton();
 
-        Assert.assertEquals("", searchCustomerPage.getIdNumber());
-        Assert.assertEquals("", searchCustomerPage.getCustomerId());
-        Assert.assertEquals("", searchCustomerPage.getAccountNumber());
-        Assert.assertEquals("", searchCustomerPage.getGsmNumber());
-        Assert.assertEquals("", searchCustomerPage.getFirstName());
-        Assert.assertEquals("", searchCustomerPage.getLastName());
+
+        softAssertions.assertThat(searchCustomerPage.getIdNumber()).isEqualTo("");
+        softAssertions.assertThat(searchCustomerPage.getFirstName()).isEqualTo("");
+        softAssertions.assertThat(searchCustomerPage.getLastName()).isEqualTo("");
+        softAssertions.assertThat(searchCustomerPage.getCustomerId()).isEqualTo("");
+        softAssertions.assertThat(searchCustomerPage.getAccountNumber()).isEqualTo("");
+        softAssertions.assertThat(searchCustomerPage.getGsmNumber()).isEqualTo("");
 
     }
 
@@ -143,22 +140,17 @@ public class SearchCustomerTests extends BaseTest {
 
         searchCustomerPage.clickSearchButton();
 
-        // Create Customer butonuna tıklayın
         CreateCustomerPage createCustomerPage = searchCustomerPage.clickCreateCustomerButton();
 
-        // Müşteri oluşturma sayfasının yüklendiğini kontrol et
         softAssertions.assertThat(createCustomerPage)
                 .as("Should navigate to Create Customer page")
                 .isNotNull();
 
-        // Sayfanın başlığını kontrol et ya da başka bir özellik
         String expectedTitle = "Create Customer"; // Beklenen sayfa başlığını burada güncelleyin
         softAssertions.assertThat(createCustomerPage.getCreateCustomerTitle()) // getPageTitle() metodunu CreateCustomerPage'de oluşturduğunuzdan emin olun
                 .as("Page title should be 'Create Customer'")
                 .isEqualTo(expectedTitle);
 
-        // Soft assertions'ı kontrol et
-        softAssertions.assertAll();
     }
 
 

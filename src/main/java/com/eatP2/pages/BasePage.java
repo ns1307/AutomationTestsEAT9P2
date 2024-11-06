@@ -62,7 +62,7 @@ public class BasePage {
         // Perform login
         WebElement usernameField = find(this.emailField);
         WebElement passwordField = find(this.passwordField);
-        WebElement loginButton = find(loginBtn);
+        WebElement loginButton = driver.findElement(loginBtn);
 
         usernameField.sendKeys(Constants.username);
         passwordField.sendKeys(Constants.password);
@@ -101,6 +101,11 @@ public class BasePage {
     public void clickButtonWithJS(By id){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", find(id));
+    }
+    public void clickButtonWithScroll(By id,boolean scroll){
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView("+scroll+");",
+                wait.until(ExpectedConditions.elementToBeClickable(id)));
+        clickButton(id);
     }
 
     public void clickEditIcon() {
