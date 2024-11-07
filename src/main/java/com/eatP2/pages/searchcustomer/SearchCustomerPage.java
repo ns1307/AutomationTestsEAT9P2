@@ -23,8 +23,6 @@ public class SearchCustomerPage extends BasePage {
         super(driver);
     }
 
-
-
     public String getIdNumber(){
         return find(idNumberField).getText();
     }
@@ -67,7 +65,7 @@ public class SearchCustomerPage extends BasePage {
     }
 
     public  void clickSearchButton() {
-        clickButtonWithScroll(searchButton,true);
+        clickButtonWithScroll(searchButton,false);
     }
     public void clickClearButton() {
         clickButtonWithScroll(clearButton,false);

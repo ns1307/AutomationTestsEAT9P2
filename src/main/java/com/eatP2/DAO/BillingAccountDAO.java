@@ -2,10 +2,6 @@ package com.eatP2.DAO;
 
 import com.eatP2.models.Address;
 import com.eatP2.models.BillingAccount;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
 
 import java.sql.*;
 
@@ -13,7 +9,7 @@ import java.sql.*;
 public class BillingAccountDAO extends BaseDAO {
 
     public BillingAccount getBillingAccountFromDatabase(String billingAccID) {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         String accId=null;
         String accName = null;
         String accStatus = null;
@@ -22,7 +18,7 @@ public class BillingAccountDAO extends BaseDAO {
         Address address=null;
         try {
             String query = "SELECT account_name,account_status, account_type, account_description,address_id FROM BillingAccount WHERE id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             preparedStatement.setString(1, billingAccID);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -49,7 +45,7 @@ public class BillingAccountDAO extends BaseDAO {
     }
 
     public BillingAccount getBillingAccountInstanceOfUserFromDatabase(String customerID) {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         String accName = null;
         String accStatus = null;
         String accType= null;
@@ -57,7 +53,7 @@ public class BillingAccountDAO extends BaseDAO {
         Address address=null;
         try {
             String query = "SELECT account_name,account_status, account_type, account_description,address_id FROM BillingAccount WHERE customer_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             preparedStatement.setString(1, customerID);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

@@ -1,10 +1,12 @@
 package com.eatP2;
 
+import com.eatP2.pages.BasePage;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.sql.Connection;
@@ -20,9 +22,15 @@ public class BaseTest {
     @Before
     public void setUp() {
         // Set the path to the chromedriver executable
-        driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+
+        // "Chrome is being controlled by automated test software" mesajını gizler
+        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+
+
+        driver = new ChromeDriver(options);
         softAssertions = new SoftAssertions();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(4));
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.manage().window().maximize();
 

@@ -66,7 +66,7 @@ public class BasePage {
 
         usernameField.sendKeys(Constants.username);
         passwordField.sendKeys(Constants.password);
-        loginButton.click();
+        clickButtonWithJS(loginBtn);
     }
 
     public  boolean checkDisabledSaveButton() {
@@ -96,13 +96,17 @@ public class BasePage {
     }
 
     public void clickButton(By id){
+        delay(1);
         wait.until(ExpectedConditions.elementToBeClickable(id)).click();
     }
     public void clickButtonWithJS(By id){
+        delay(1);
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", find(id));
+
     }
     public void clickButtonWithScroll(By id,boolean scroll){
+        delay(1);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView("+scroll+");",
                 wait.until(ExpectedConditions.elementToBeClickable(id)));
         clickButton(id);
@@ -193,8 +197,10 @@ public class BasePage {
         return find(locator).getText();
     }
     protected void setValue(By locator, String value) {
+        delay(0.5);
         find(locator).clear();
         find(locator).sendKeys(value);
+
     }
     protected void chooseFromDropdown(By locator, String value) {
         Select dropdown = new Select(find(locator));
@@ -221,5 +227,14 @@ public class BasePage {
     }
     public boolean checkNextButton() {
         return isDisplayed(nextBtn);
+    }
+    public void delay(double second) {
+        try {
+            Thread.sleep((long) (second* 1000));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

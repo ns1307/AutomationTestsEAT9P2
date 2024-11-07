@@ -4,22 +4,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class BaseDAO {
-    static Connection connection;
-    public void connectToDatabase(){
+    static Connection usersDBconnection;
+
+    public void connectToDatabase(String url,String user,String password){
         try {
             // Set up database connection
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5433/identitydb", "postgres", "test");
+            usersDBconnection = DriverManager.getConnection(
+                    url,
+                    user, password);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    public void connectToUsersDatabase(){
-        try {
-            // Set up database connection
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5433/identitydb", "postgres", "test");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void connectToUsersDatabase() {
+        connectToDatabase("jdbc:postgresql://localhost:5433/identitydb", "postgres", "test"
+        );
     }
 }

@@ -2,16 +2,13 @@ package com.eatP2.DAO;
 
 import com.eatP2.models.Campaign;
 import com.eatP2.models.Offer;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.sql.*;
 
 public class NewSaleDAO extends BaseDAO {
 
     public  Campaign getCampaignInstanceFromDatabase() {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         String campaignID=null;
         String name=null;
         String startDate=null;
@@ -20,7 +17,7 @@ public class NewSaleDAO extends BaseDAO {
 
         try {
             String query = "SELECT * FROM Campaigns ORDER BY RANDOM() LIMIT 1;";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     campaignID = resultSet.getString("ID");
@@ -42,14 +39,14 @@ public class NewSaleDAO extends BaseDAO {
         }
     }
     public Offer getOfferInstanceFromDatabase() {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         String offerID=null;
         String name=null;
         String startDate=null;
         String endDate=null;
         try {
             String query = "SELECT * FROM Offers ORDER BY RANDOM() LIMIT 1;";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     offerID = resultSet.getString("ID");

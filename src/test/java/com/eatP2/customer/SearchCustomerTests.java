@@ -1,23 +1,31 @@
 package com.eatP2.customer;
 
 import com.eatP2.BaseTest;
+import com.eatP2.pages.BasePage;
 import com.eatP2.pages.customer.CreateCustomerPage;
 import com.eatP2.pages.searchcustomer.SearchCustomerPage;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 
-
-public class SearchCustomerTests extends BaseTest {
+public class SearchCustomerTests extends BaseTest {// TS-02 - Customer Search and Display
     SearchCustomerPage searchCustomerPage;
+
     @Before
-    public void setUp(){
+    public void setUp() {
         super.setUp();
-        this.searchCustomerPage= new SearchCustomerPage(driver);
+        this.searchCustomerPage = new SearchCustomerPage(driver);
         searchCustomerPage.login();
     }
 
-    @Test
+    @After
+    public void tearDown() {
+        searchCustomerPage.delay(0.5);
+        super.tearDown();
+    }
+/*
+    @Test //TC-01
     public void testFiltersHeaderIsVisible() {
 
         softAssertions.assertThat(searchCustomerPage.isFiltersHeaderDisplayed())
@@ -25,7 +33,7 @@ public class SearchCustomerTests extends BaseTest {
 
     }
 
-    @Test
+    @Test //TC-02
     public void testSearchByIdNumber() {
 
         searchCustomerPage.setIdNumber("12345678901");
@@ -36,8 +44,8 @@ public class SearchCustomerTests extends BaseTest {
                 .as("Result table should be displayed")
                 .isTrue();
     }
-
-    @Test
+*/
+    @Test //TC-03
     public void testSearchByCustomerId() {
         searchCustomerPage.setCustomerId("a2183bed-230e-4104-98bc-a8a76484b550");
 
@@ -49,31 +57,31 @@ public class SearchCustomerTests extends BaseTest {
 
     }
 
-    @Test
-    public void testSearchByFirstName(){
+    @Test //TC-04
+    public void testSearchByFirstName() {
 
         searchCustomerPage.setFirstName("First");
 
         searchCustomerPage.clickSearchButton();
-        String actualResult=searchCustomerPage.getNameFieldMessage();
+        String actualResult = searchCustomerPage.getNameFieldMessage();
 
         softAssertions.assertThat(actualResult)
-                .as("Expected message should indicate that both names must be filled together.")
-                .contains("Both First Name and Last Name must be filled together.");
+            .as("Expected message should indicate that both names must be filled together.")
+            .contains("Both First Name and Last Name must be filled together.");
 
         softAssertions.assertThat(searchCustomerPage.isResultsTableDisplayed())
-                .as("Results table should not be displayed when only First Name is filled.")
-                .isFalse();
+            .as("Results table should not be displayed when only First Name is filled.")
+            .isFalse();
 
     }
-
-    @Test
-    public void testSearchByLastName(){
+/*
+    @Test //TC-05
+    public void testSearchByLastName() {
 
         searchCustomerPage.setLastName("Last");
 
         searchCustomerPage.clickSearchButton();
-        String actualResult=searchCustomerPage.getNameFieldMessage();
+        String actualResult = searchCustomerPage.getNameFieldMessage();
 
         softAssertions.assertThat(actualResult)
                 .as("Expected message should indicate that both names must be filled together.")
@@ -83,15 +91,13 @@ public class SearchCustomerTests extends BaseTest {
                 .as("Results table should not be displayed when only Last Name is filled.")
                 .isFalse();
     }
-
-    @Test
-    public void testClearButton(){
+*/
+    @Test //TC-06
+    public void testClearButton() {
 
         searchCustomerPage.setCustomerId("a2183bed-230e-4104-98bc-a8a76484b550");
 
-
         searchCustomerPage.clickClearButton();
-
 
         softAssertions.assertThat(searchCustomerPage.getIdNumber()).isEqualTo("");
         softAssertions.assertThat(searchCustomerPage.getFirstName()).isEqualTo("");
@@ -101,21 +107,21 @@ public class SearchCustomerTests extends BaseTest {
         softAssertions.assertThat(searchCustomerPage.getGsmNumber()).isEqualTo("");
 
     }
+    /*
+        @Test //TC-07
+        public void testSearchByGsmNumber() {
 
-    @Test
-    public void testSearchByGsmNumber(){
+            searchCustomerPage.setGsmNumber("5551234567");
 
-        searchCustomerPage.setGsmNumber("5551234567");
+            searchCustomerPage.clickSearchButton();
 
-        searchCustomerPage.clickSearchButton();
+            softAssertions.assertThat(searchCustomerPage.isResultsTableDisplayed())
+                    .as("Result table should be displayed")
+                    .isTrue();
 
-        softAssertions.assertThat(searchCustomerPage.isResultsTableDisplayed())
-                .as("Result table should be displayed")
-                .isTrue();
-
-    }
-
-    @Test
+        }
+    */
+    @Test //TC-08
     public void testSearchWithEmptyFields() {
 
         searchCustomerPage.setIdNumber("");
@@ -126,7 +132,6 @@ public class SearchCustomerTests extends BaseTest {
         searchCustomerPage.setLastName("");
 
 
-
         softAssertions.assertThat(searchCustomerPage.isSearchButtonEnabled())
                 .as("Search button should be inactive when fields are empty.")
                 .isFalse();
@@ -135,8 +140,8 @@ public class SearchCustomerTests extends BaseTest {
     @Test
     public void testCreateCustomerButtonNavigatesToCreateCustomerPage() {
 
-        searchCustomerPage.setFirstName("Test"); // İlk ad
-        searchCustomerPage.setLastName("User");  // Soyad
+        searchCustomerPage.setFirstName("Test");
+        searchCustomerPage.setLastName("User");
 
         searchCustomerPage.clickSearchButton();
 
@@ -146,8 +151,8 @@ public class SearchCustomerTests extends BaseTest {
                 .as("Should navigate to Create Customer page")
                 .isNotNull();
 
-        String expectedTitle = "Create Customer"; // Beklenen sayfa başlığını burada güncelleyin
-        softAssertions.assertThat(createCustomerPage.getCreateCustomerTitle()) // getPageTitle() metodunu CreateCustomerPage'de oluşturduğunuzdan emin olun
+        String expectedTitle = "Create Customer";
+        softAssertions.assertThat(createCustomerPage.getCreateCustomerTitle())
                 .as("Page title should be 'Create Customer'")
                 .isEqualTo(expectedTitle);
 

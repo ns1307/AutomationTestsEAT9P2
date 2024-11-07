@@ -9,14 +9,14 @@ import java.sql.SQLException;
 public class ContactMediumDAO extends BaseDAO {
 
     public ContactMedium getContactMediumFromDatabase(String customerId) {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         String email = null;
         String homePhone = null;
         String mobilePhone = null;
         String fax = null;
         try {
             String query = "SELECT email, homephone, mobilephone, fax FROM ContactMedium WHERE customer_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             preparedStatement.setString(1, customerId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

@@ -1,8 +1,6 @@
 package com.eatP2.DAO;
 
-import com.eatP2.models.Customer;
 import com.eatP2.models.IndividualCustomer;
-import com.eatP2.models.Offer;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,10 +9,10 @@ import java.sql.SQLException;
 public class CustomerDAO extends BaseDAO{
 
     public boolean isCustomerDeletedFromDatabase(String customerId) {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         try {
             String query = "SELECT COUNT(*) FROM customers WHERE customer_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             preparedStatement.setString(1, customerId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -34,7 +32,7 @@ public class CustomerDAO extends BaseDAO{
     }
 
     public IndividualCustomer getCustomerInstanceFromDatabase() {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         String id = null;
         String firstName = null;
         String middleName = null;
@@ -46,7 +44,7 @@ public class CustomerDAO extends BaseDAO{
         String nationalityID = null;
         try {
             String query = "SELECT * FROM IndividualCustomers ORDER BY RANDOM() LIMIT 1;";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     id = resultSet.getString("ID");
@@ -72,7 +70,7 @@ public class CustomerDAO extends BaseDAO{
         }
     }
     public IndividualCustomer getOneCustomerWithoutBillingAccount() {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         String id = null;
         String firstName = null;
         String middleName = null;
@@ -84,7 +82,7 @@ public class CustomerDAO extends BaseDAO{
         String nationalityID = null;
         try {
             String query = "SELECT TOP 1 FROM Customer c LEFT JOIN BillingAccount b ON c.customerID = b.customerID WHERE b.customerID IS NULL;";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     id = resultSet.getString("ID");
@@ -113,7 +111,7 @@ public class CustomerDAO extends BaseDAO{
 
 
     public IndividualCustomer getOneCustomerWithBillingAccount() {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         String id = null;
         String firstName = null;
         String middleName = null;
@@ -125,7 +123,7 @@ public class CustomerDAO extends BaseDAO{
         String nationalityID = null;
         try {
             String query = "SELECT c.* FROM Customer c JOIN BillingAccount b ON c.ID = b.customerID LIMIT 1;";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     id = resultSet.getString("ID");

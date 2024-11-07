@@ -11,7 +11,10 @@ public class IndividualCustomer extends Customer{
     private String motherName;
     private String nationalityID;
 
-    public IndividualCustomer(String id, String firstName, String middleName, String lastName, String gender, String birthDate, String fatherName, String motherName, String nationalityID) {
+    public IndividualCustomer(String id, String firstName, String middleName,
+                              String lastName, String gender,
+                              String birthDate, String fatherName,
+                              String motherName, String nationalityID) {
         this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;

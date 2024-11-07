@@ -7,7 +7,7 @@ import java.sql.*;
 public class AddressDAO extends BaseDAO {
 
     public Address getAdresFromDatabase(String addressID) {
-        connectToDatabase();
+        connectToDatabase("url","username","password");
         String cityName=null;
         String districtName=null;
         String postalCode=null;
@@ -18,7 +18,7 @@ public class AddressDAO extends BaseDAO {
                     + "JOIN District d ON a.district_id = d.ID "
                     + "JOIN City c ON d.city_id = c.ID "
                     + "WHERE a.ID = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             preparedStatement.setString(1, addressID);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

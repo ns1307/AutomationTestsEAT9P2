@@ -1,7 +1,5 @@
 package com.eatP2.DAO;
 
-import com.eatP2.models.Address;
-import com.eatP2.models.BillingAccount;
 import com.eatP2.models.User;
 
 import java.sql.PreparedStatement;
@@ -21,7 +19,7 @@ public class UserDAO extends BaseDAO{
 
         try {
             String query = "SELECT * FROM users LIMIT 1;";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = usersDBconnection.prepareStatement(query);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     email = resultSet.getString("email");
